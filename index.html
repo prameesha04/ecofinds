@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoFinds - Sustainable Second-Hand Marketplace</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 15px 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #4a5568;
+        }
+
+        .logo::before {
+            content: "🌱";
+            font-size: 28px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            background: #667eea;
+            color: white;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.active {
+            background: #764ba2;
+        }
+
+        /* Auth Screen */
+        .auth-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+        }
+
+        .auth-form {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .auth-form h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #4a5568;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #4a5568;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .auth-switch button {
+            background: none;
+            border: none;
+            color: #667eea;
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: underline;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Search and Filter */
+        .search-filter {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .category-filter {
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            min-width: 150px;
+        }
+
+        .add-product-btn {
+            padding: 12px 20px;
+            background: #48bb78;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .add-product-btn:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+        }
+
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .product-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2d3748;
+        }
+
+        .product-price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #48bb78;
+            margin-bottom: 10px;
+        }
+
+        .product-category {
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-secondary {
+            padding: 8px 16px;
+            background: #e2e8f0;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+
+        .btn-danger {
+            background: #f56565;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #e53e3e;
+        }
+
+        .btn-cart {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-cart:hover {
+            background: #5a6fd8;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .profile-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .stats-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 10px;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        /* Cart styles */
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+        }
+
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-total {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .search-filter {
+                flex-direction: column;
+            }
+
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cart-item {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .checkout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(72, 187, 120, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">EcoFinds</div>
+            <div class="nav-buttons" id="navButtons">
+                <!-- Navigation will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Auth Screen -->
+        <div id="authScreen" class="auth-screen">
+            <div class="auth-form">
+                <h2 id="authTitle">Welcome to EcoFinds</h2>
+                <form id="authForm">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required>
+                    </div>
+                    <div class="form-group hidden" id="usernameGroup">
+                        <label for="username">Username</label>
+                        <input type="text" id="username">
+                    </div>
+                    <button type="submit" class="btn-primary" id="authSubmit">Sign In</button>
+                </form>
+                <div class="auth-switch">
+                    <span id="authSwitchText">Don't have an account?</span>
+                    <button type="button" id="authSwitchBtn">Sign Up</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div id="mainContent" class="hidden">
+            <!-- Product Feed -->
+            <div id="productFeed" class="main-content">
+                <div class="search-filter">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search products...">
+                    <select class="category-filter" id="categoryFilter">
+                        <option value="">All Categories</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="clothing">Clothing</option>
+                        <option value="furniture">Furniture</option>
+                        <option value="books">Books</option>
+                        <option value="sports">Sports</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <button class="add-product-btn" onclick="showAddProduct()">
+                        <span>+</span> Add Product
+                    </button>
+                </div>
+                <div class="product-grid" id="productGrid">
+                    <!-- Products will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- My Listings -->
+            <div id="myListings" class="main-content hidden">
+                <h2>My Listings</h2>
+                <button class="add-product-btn" onclick="showAddProduct()" style="margin: 20px 0;">
+                    <span>+</span> Add New Product
+                </button>
+                <div class="product-grid" id="myListingsGrid">
+                    <!-- My listings will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Dashboard -->
+            <div id="dashboard" class="main-content hidden">
+                <h2>Dashboard</h2>
+                <div class="dashboard">
+                    <div class="profile-section">
+                        <div class="profile-avatar" id="profileAvatar">👤</div>
+                        <form id="profileForm">
+                            <div class="form-group">
+                                <label for="profileUsername">Username</label>
+                                <input type="text" id="profileUsername">
+                            </div>
+                            <div class="form-group">
+                                <label for="profileEmail">Email</label>
+                                <input type="email" id="profileEmail">
+                            </div>
+                            <button type="submit" class="btn-primary">Update Profile</button>
+                        </form>
+                    </div>
+                    <div class="stats-section">
+                        <h3>Your Stats</h3>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-number" id="statListings">0</div>
+                                <div class="stat-label">Active Listings</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number" id="statSold">0</div>
+                                <div class="stat-label">Items Sold</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number" id="statPurchases">0</div>
+                                <div class="stat-label">Items Purchased</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cart -->
+            <div id="cart" class="main-content hidden">
+                <h2>Shopping Cart</h2>
+                <div id="cartItems">
+                    <!-- Cart items will be populated by JavaScript -->
+                </div>
+                <div class="cart-total" id="cartTotal">
+                    <!-- Cart total will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Previous Purchases -->
+            <div id="previousPurchases" class="main-content hidden">
+                <h2>Previous Purchases</h2>
+                <div id="purchaseHistory">
+                    <!-- Purchase history will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Product Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Add New Product</h2>
+            <form id="productForm">
+                <input type="hidden" id="editProductId">
+                <div class="form-group">
+                    <label for="productTitle">Product Title</label>
+                    <input type="text" id="productTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="productCategory">Category</label>
+                    <select id="productCategory" required>
+                        <option value="">Select Category</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="clothing">Clothing</option>
+                        <option value="furniture">Furniture</option>
+                        <option value="books">Books</option>
+                        <option value="sports">Sports</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="productDescription">Description</label>
+                    <textarea id="productDescription" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="productPrice">Price ($)</label>
+                    <input type="number" id="productPrice" min="0" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Product Image</label>
+                    <button type="button" class="btn-secondary" style="width: 100%; padding: 20px; margin-top: 5px;">
+                        📷 Add Image (Placeholder)
+                    </button>
+                </div>
+                <button type="submit" class="btn-primary">Save Product</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div id="productDetailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="productDetailContent">
+                <!-- Product details will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Application State
+        let currentUser = null;
+        let currentView = 'feed';
+        let isSignUp = false;
+        let products = [];
+        let cart = [];
+        let purchaseHistory = [];
+
+        // Sample data
+        const sampleProducts = [
+            {
+                id: 1,
+                title: "Vintage Leather Jacket",
+                description: "High-quality vintage leather jacket in excellent condition. Perfect for casual wear.",
+                category: "clothing",
+                price: 75.00,
+                sellerId: "demo",
+                emoji: "🧥"
+            },
+            {
+                id: 2,
+                title: "iPhone 12 Pro",
+                description: "Used iPhone 12 Pro 128GB in good condition. Minor scratches on the back.",
+                category: "electronics",
+                price: 450.00,
+                sellerId: "demo",
+                emoji: "📱"
+            },
+            {
+                id: 3,
+                title: "Modern Coffee Table",
+                description: "Sleek wooden coffee table with storage compartment. Great for modern homes.",
+                category: "furniture",
+                price: 120.00,
+                sellerId: "demo2",
+                emoji: "🪑"
+            },
+            {
+                id: 4,
+                title: "Programming Books Set",
+                description: "Collection of 5 programming books covering JavaScript, Python, and React.",
+                category: "books",
+                price: 35.00,
+                sellerId: "demo2",
+                emoji: "📚"
+            }
+        ];
+
+        // Initialize the app
+        function initApp() {
+            // Load sample data
+            products = [...sampleProducts];
+            
+            // Check if user is logged in (simulate with localStorage)
+            const savedUser = JSON.parse(localStorage.getItem('ecofinds_user') || 'null');
+            if (savedUser) {
+                currentUser = savedUser;
+                showMainApp();
+            } else {
+                showAuthScreen();
+            }
+
+            // Event listeners
+            document.getElementById('authForm').addEventListener('submit', handleAuth);
+            document.getElementById('authSwitchBtn').addEventListener('click', toggleAuthMode);
+            document.getElementById('productForm').addEventListener('submit', handleProductSubmit);
+            document.getElementById('profileForm').addEventListener('submit', handleProfileUpdate);
+            document.getElementById('searchInput').addEventListener('input', filterProducts);
+            document.getElementById('categoryFilter').addEventListener('change', filterProducts);
+        }
+
+        // Authentication
+        function handleAuth(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const username = document.getElementById('username').value;
+
+            if (isSignUp) {
+                // Sign up
+                currentUser = {
+                    id: Date.now().toString(),
+                    email,
+                    username: username || email.split('@')[0],
+                    joinDate: new Date().toISOString()
+                };
+                localStorage.setItem('ecofinds_user', JSON.stringify(currentUser));
+                showMainApp();
+            } else {
+                // Sign in
+                currentUser = {
+                    id: email === 'demo@example.com' ? 'demo' : Date.now().toString(),
+                    email,
+                    username: email === 'demo@example.com' ? 'Demo User' : email.split('@')[0],
+                    joinDate: new Date().toISOString()
+                };
+                localStorage.setItem('ecofinds_user', JSON.stringify(currentUser));
+                showMainApp();
+            }
+        }
+
+        function toggleAuthMode() {
+            isSignUp = !isSignUp;
+            const title = document.getElementById('authTitle');
+            const submit = document.getElementById('authSubmit');
+            const switchText = document.getElementById('authSwitchText');
+            const switchBtn = document.getElementById('authSwitchBtn');
+            const usernameGroup = document.getElementById('usernameGroup');
+
+            if (isSignUp) {
+                title.textContent = 'Join EcoFinds';
+                submit.textContent = 'Sign Up';
+                switchText.textContent = 'Already have an account?';
+                switchBtn.textContent = 'Sign In';
+                usernameGroup.classList.remove('hidden');
+            } else {
+                title.textContent = 'Welcome Back';
+                submit.textContent = 'Sign In';
+                switchText.textContent = "Don't have an account?";
+                switchBtn.textContent = 'Sign Up';
+                usernameGroup.classList.add('hidden');
+            }
+        }
+
+        function showAuthScreen() {
+            document.getElementById('authScreen').classList.remove('hidden');
+            document.getElementById('mainContent').classList.add('hidden');
+        }
+
+        function showMainApp() {
+            document.getElementById('authScreen').classList.add('hidden');
+            document.getElementById('mainContent').classList.remove('hidden');
+            updateNavigation();
+            showProductFeed();
+            updateDashboard();
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('ecofinds_user');
+            cart = [];
+            showAuthScreen();
+        }
+
+        // Navigation
+        function updateNavigation() {
+            const navButtons = document.getElementById('navButtons');
+            navButtons.innerHTML = `
+                <button class="nav-btn ${currentView === 'feed' ? 'active' : ''}" onclick="showProductFeed()">Browse</button>
+                <button class="nav-btn ${currentView === 'listings' ? 'active' : ''}" onclick="showMyListings()">My Listings</button>
+                <button class="nav-btn ${currentView === 'cart' ? 'active' : ''}" onclick="showCart()">Cart (${cart.length})</button>
+                <button class="nav-btn ${currentView === 'purchases' ? 'active' : ''}" onclick="showPreviousPurchases()">Purchases</button>
+                <button class="nav-btn ${currentView === 'dashboard' ? 'active' : ''}" onclick="showDashboard()">Dashboard</button>
+                <button class="nav-btn" onclick="logout()">Logout</button>
+            `;
+        }
+
+        // Views
+        function showView(viewName) {
+            // Hide all views
+            document.querySelectorAll('#mainContent > div').forEach(div => {
+                div.classList.add('hidden');
+            });
+            
+            // Show selected view
+            document.getElementById(viewName).classList.remove('hidden');
+            currentView = viewName.replace(/([A-Z])/g, c => c.toLowerCase());
+            updateNavigation();
+        }
+
+        function showProductFeed() {
+            showView('productFeed');
+            currentView = 'feed';
+            renderProducts();
+            updateNavigation();
+        }
+
+        function showMyListings() {
+            showView('myListings');
+            currentView = 'listings';
+            renderMyListings();
+            updateNavigation();
+        }
+
+        function showCart() {
+            showView('cart');
+            currentView = 'cart';
+            renderCart();
+            updateNavigation();
+        }
+
+        function showPreviousPurchases() {
+            showView('previousPurchases');
+            currentView = 'purchases';
+            renderPurchaseHistory();
+            updateNavigation();
+        }
+
+        function showDashboard() {
+            showView('dashboard');
+            currentView = 'dashboard';
+            updateDashboard();
+            updateNavigation();
+        }
+
+        // Product Management
+        function renderProducts() {
+            const grid = document.getElementById('productGrid');
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const categoryFilter = document.getElementById('categoryFilter').value;
+
+            let filteredProducts = products.filter(product => 
+                product.title.toLowerCase().includes(searchTerm) &&
+                (categoryFilter === '' || product.category === categoryFilter)
+            );
+
+            grid.innerHTML = filteredProducts.map(product => `
+                <div class="product-card" onclick="showProductDetail(${product.id})">
+                    <div class="product-image">${product.emoji}</div>
+                    <div class="product-category">${product.category}</div>
+                    <div class="product-title">${product.title}</div>
+                    <div class="product-price">$${product.price.toFixed(2)}</div>
+                    <div class="product-actions" onclick="event.stopPropagation()">
+                        <button class="btn-secondary btn-danger" onclick="deleteProduct(${product.id})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterProducts() {
+            renderProducts();
+        }
+
+        function showAddProduct() {
+            document.getElementById('modalTitle').textContent = 'Add New Product';
+            document.getElementById('editProductId').value = '';
+            document.getElementById('productForm').reset();
+            document.getElementById('productModal').style.display = 'block';
+        }
+
+        function editProduct(id) {
+            const product = products.find(p => p.id === id);
+            if (product && product.sellerId === currentUser.id) {
+                document.getElementById('modalTitle').textContent = 'Edit Product';
+                document.getElementById('editProductId').value = product.id;
+                document.getElementById('productTitle').value = product.title;
+                document.getElementById('productCategory').value = product.category;
+                document.getElementById('productDescription').value = product.description;
+                document.getElementById('productPrice').value = product.price;
+                document.getElementById('productModal').style.display = 'block';
+            }
+        }
+
+        function deleteProduct(id) {
+            if (confirm('Are you sure you want to delete this product?')) {
+                products = products.filter(p => p.id !== id);
+                renderMyListings();
+                updateDashboard();
+            }
+        }
+
+        function handleProductSubmit(e) {
+            e.preventDefault();
+            const editId = document.getElementById('editProductId').value;
+            const title = document.getElementById('productTitle').value;
+            const category = document.getElementById('productCategory').value;
+            const description = document.getElementById('productDescription').value;
+            const price = parseFloat(document.getElementById('productPrice').value);
+
+            // Generate a random emoji for the product
+            const emojis = ['📱', '💻', '👕', '👗', '🪑', '🛏️', '📚', '📖', '⚽', '🏀', '🎮', '📷', '⌚', '🎧', '🧥', '👟'];
+            const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+
+            if (editId) {
+                // Edit existing product
+                const productIndex = products.findIndex(p => p.id == editId);
+                if (productIndex !== -1) {
+                    products[productIndex] = {
+                        ...products[productIndex],
+                        title,
+                        category,
+                        description,
+                        price
+                    };
+                }
+            } else {
+                // Add new product
+                const newProduct = {
+                    id: Date.now(),
+                    title,
+                    category,
+                    description,
+                    price,
+                    sellerId: currentUser.id,
+                    emoji: randomEmoji
+                };
+                products.push(newProduct);
+            }
+
+            closeModal();
+            if (currentView === 'listings') {
+                renderMyListings();
+            } else {
+                renderProducts();
+            }
+            updateDashboard();
+        }
+
+        function showProductDetail(id) {
+            const product = products.find(p => p.id === id);
+            if (product) {
+                const content = document.getElementById('productDetailContent');
+                content.innerHTML = `
+                    <div style="text-align: center;">
+                        <div style="font-size: 120px; margin-bottom: 20px;">${product.emoji}</div>
+                        <div style="background: #667eea; color: white; padding: 5px 15px; border-radius: 15px; display: inline-block; margin-bottom: 15px; font-size: 14px;">${product.category}</div>
+                        <h2 style="margin-bottom: 10px; color: #2d3748;">${product.title}</h2>
+                        <div style="font-size: 24px; font-weight: bold; color: #48bb78; margin-bottom: 20px;">${product.price.toFixed(2)}</div>
+                        <p style="color: #666; line-height: 1.6; margin-bottom: 25px;">${product.description}</p>
+                        ${product.sellerId !== currentUser.id ? 
+                            `<button class="btn-primary" onclick="addToCart(${product.id}); closeModal();">Add to Cart</button>` : 
+                            '<p style="color: #999;">This is your own listing</p>'
+                        }
+                    </div>
+                `;
+                document.getElementById('productDetailModal').style.display = 'block';
+            }
+        }
+
+        // Cart Management
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product && product.sellerId !== currentUser.id) {
+                if (!cart.find(item => item.id === productId)) {
+                    cart.push(product);
+                    updateNavigation();
+                    alert('Product added to cart!');
+                } else {
+                    alert('Product already in cart!');
+                }
+            }
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            renderCart();
+            updateNavigation();
+        }
+
+        function renderCart() {
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p style="text-align: center; color: #666; margin: 40px 0;">Your cart is empty</p>';
+                cartTotal.innerHTML = '';
+                return;
+            }
+
+            cartItems.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <div class="cart-item-image">${item.emoji}</div>
+                    <div class="cart-item-details">
+                        <h4>${item.title}</h4>
+                        <p style="color: #666; font-size: 14px;">${item.category}</p>
+                        <p style="font-weight: bold; color: #48bb78;">${item.price.toFixed(2)}</p>
+                    </div>
+                    <button class="btn-secondary btn-danger" onclick="removeFromCart(${item.id})">Remove</button>
+                </div>
+            `).join('');
+
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            cartTotal.innerHTML = `
+                <h3>Total: ${total.toFixed(2)}</h3>
+                <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+            `;
+        }
+
+        function checkout() {
+            if (cart.length === 0) return;
+
+            // Move cart items to purchase history
+            const purchaseDate = new Date().toISOString();
+            cart.forEach(item => {
+                purchaseHistory.push({
+                    ...item,
+                    purchaseDate,
+                    purchaseId: Date.now() + Math.random()
+                });
+            });
+
+            // Clear cart
+            cart = [];
+            
+            // Update views
+            renderCart();
+            updateNavigation();
+            updateDashboard();
+            
+            alert('Purchase completed successfully! Thank you for shopping with EcoFinds.');
+        }
+
+        // Purchase History
+        function renderPurchaseHistory() {
+            const historyContainer = document.getElementById('purchaseHistory');
+
+            if (purchaseHistory.length === 0) {
+                historyContainer.innerHTML = '<p style="text-align: center; color: #666; margin: 40px 0;">No previous purchases</p>';
+                return;
+            }
+
+            historyContainer.innerHTML = purchaseHistory.map(item => `
+                <div class="cart-item">
+                    <div class="cart-item-image">${item.emoji}</div>
+                    <div class="cart-item-details">
+                        <h4>${item.title}</h4>
+                        <p style="color: #666; font-size: 14px;">${item.category}</p>
+                        <p style="font-weight: bold; color: #48bb78;">${item.price.toFixed(2)}</p>
+                        <p style="color: #999; font-size: 12px;">Purchased: ${new Date(item.purchaseDate).toLocaleDateString()}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Dashboard
+        function updateDashboard() {
+            if (currentUser) {
+                document.getElementById('profileUsername').value = currentUser.username;
+                document.getElementById('profileEmail').value = currentUser.email;
+                document.getElementById('profileAvatar').textContent = currentUser.username.charAt(0).toUpperCase();
+
+                // Update stats
+                const myListings = products.filter(p => p.sellerId === currentUser.id);
+                document.getElementById('statListings').textContent = myListings.length;
+                document.getElementById('statSold').textContent = '0'; // Placeholder
+                document.getElementById('statPurchases').textContent = purchaseHistory.length;
+            }
+        }
+
+        function handleProfileUpdate(e) {
+            e.preventDefault();
+            const username = document.getElementById('profileUsername').value;
+            const email = document.getElementById('profileEmail').value;
+
+            currentUser.username = username;
+            currentUser.email = email;
+            
+            localStorage.setItem('ecofinds_user', JSON.stringify(currentUser));
+            
+            updateDashboard();
+            alert('Profile updated successfully!');
+        }
+
+        // Modal Management
+        function closeModal() {
+            document.getElementById('productModal').style.display = 'none';
+            document.getElementById('productDetailModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const productModal = document.getElementById('productModal');
+            const detailModal = document.getElementById('productDetailModal');
+            
+            if (event.target === productModal) {
+                productModal.style.display = 'none';
+            }
+            if (event.target === detailModal) {
+                detailModal.style.display = 'none';
+            }
+        }
+
+        // Initialize the app when the page loads
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>-cart" onclick="addToCart(${product.id})">Add to Cart</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderMyListings() {
+            const grid = document.getElementById('myListingsGrid');
+            const myProducts = products.filter(product => product.sellerId === currentUser.id);
+
+            grid.innerHTML = myProducts.map(product => `
+                <div class="product-card">
+                    <div class="product-image">${product.emoji}</div>
+                    <div class="product-category">${product.category}</div>
+                    <div class="product-title">${product.title}</div>
+                    <div class="product-price">$${product.price.toFixed(2)}</div>
+                    <div class="product-actions">
+                        <button class="btn-secondary" onclick="editProduct(${product.id})">Edit</button>
+                        <button class="btn-secondary btn-danger" onclick="deleteProduct(${product.id})">Delete</button></div>
